@@ -22,7 +22,7 @@ public class Coder {
     public static void incrementRotor(int rotorNum) {
         char lastChar = rotors[rotorNum][25];
 
-        for (int i = 0; i < rotors[rotorNum].length - 1; i++) {
+        for (int i = rotors[rotorNum].length - 2; i >= 0 ; i--) {
             rotors[rotorNum][i+1] =  rotors[rotorNum][i];
         }
 
