@@ -18,15 +18,14 @@ public class EnigmaMachine {
         System.out.println();
 
         for (int i = 0; i < rotors.size(); i++) {
-            System.out.println("Rotor " + (i+1) + ": " + rotors.get(i));
+            System.out.println(rotors.get(i));
         }
 
         System.out.println();
-        
+
         int counter = 1;
         while (counter < 4) {
             System.out.println("enter a number 1 - 5 that hasn't already been chosen");
-            System.out.println("Rotor " + counter + ":");
             int rotorNum = sc.nextInt();
             selectedRotors[counter - 1] = rotors.get(rotorNum-1);
             counter++;
