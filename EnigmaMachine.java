@@ -1,3 +1,4 @@
+import java.security.CryptoPrimitive;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -11,7 +12,7 @@ public class EnigmaMachine {
                                 new Rotor("QYHOGNECVPUZTFDJAXWMKISRBL".toCharArray()),
                                 new Rotor("QWERTZUIOASDFGHJKPYXCVBNML".toCharArray())));
 
-    static Rotor[] selectedRotors = new Rotor[3];
+    static ArrayList<Rotor> selectedRotors = new ArrayList<>();
 
     public static void introduction(Scanner sc) {
         System.out.println("Hello! Please choose 3 of the following 5 rotors");
@@ -23,18 +24,12 @@ public class EnigmaMachine {
 
         System.out.println();
 
-        int counter = 1;
-        while (counter < 4) {
-            System.out.println("enter a number 1 - 5 that hasn't already been chosen");
-            int rotorNum = sc.nextInt();
-            selectedRotors[counter - 1] = rotors.get(rotorNum-1);
-            counter++;
-        }
+        selectRotors(sc);
 
         System.out.println("Selected Rotors:");
 
-        for (int i = 0; i < selectedRotors.length; i++) {
-            System.out.println(selectedRotors[i]);
+        for (int i = 0; i < selectedRotors.size(); i++) {
+            System.out.println(selectedRotors.get(i));
         }
 
         System.out.println("");
@@ -55,9 +50,39 @@ public class EnigmaMachine {
     }
 
     public static char processChar(char letter) {
-        for (int i = 0; i < selectedRotors.length; i++) {
-            letter = selectedRotors[i].convertChar(letter);
+        for (int i = 0; i < selectedRotors.size(); i++) {
+            letter = selectedRotors.get(i).convertChar(letter);
         }
         return letter;
+    }
+
+    private static void selectRotors(Scanner sc) {
+        while (selectedRotors.size() < 3) {
+            System.out.println("enter a number 1 - 5 that hasn't already been chosen");
+            int rotorNum = sc.nextInt();
+            System.out.println();
+
+            boolean needToRedo = false;
+            for (int i = 0; i < selectedRotors.size(); i++) {
+                if (rotorNum == selectedRotors.get(i).getRotorNum()) {
+                    System.out.println("You've already selected that rotor, try again");
+                    needToRedo = true;
+                    break;
+                }
+            }
+
+            if (needToRedo) 
+                continue;
+
+            try {
+                System.out.println("Selected " + rotors.get(rotorNum-1));
+                selectedRotors.add(rotors.get(rotorNum-1));
+            } catch (IndexOutOfBoundsException e) {
+                System.out.println("That's not a valid rotor! >:(");
+                continue;
+            }
+
+            System.out.println();
+        }
     }
 }

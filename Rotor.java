@@ -54,4 +54,8 @@ public class Rotor {
     public String toString() {
         return "Rotor " + rotorNumber + ": " + Arrays.toString(order);
     }
+
+    public int getRotorNum() {
+        return rotorNumber;
+    }
 }
