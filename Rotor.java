@@ -1,21 +1,21 @@
 import java.util.Arrays;
 
-public class Rotor extends Reflector{
+public class Rotor {
+    private char[] order = new char[26];
     private int incrementation;
 
     public Rotor(char[] order) {
-        super(order);
+        this.order = order;
         incrementation = 0;
     }
 
     public void incrementRotor() {
-        char lastChar = getOrder()[25];
+        char lastChar = order[25];
 
-        for (int i = getOrder().length - 2; i >= 0 ; i--) {
-            getOrder()[(i+1) % 26] =  getOrder()[i];
-        }
+        for (int i = order.length - 2; i >= 0 ; i--)
+            order[(i+1) % 26] =  order[i];
 
-        getOrder()[0] = lastChar;
+        order[0] = lastChar;
         incrementation++;
     }
 
@@ -35,12 +35,18 @@ public class Rotor extends Reflector{
         return incrementation;
     }
 
-    public  void setAndPrint(int setPosition) {
+    public void setAndPrint(int setPosition) {
         setRotorPosition(setPosition);
         System.out.println(this);
     }
 
+    public char convertChar(Character letter) {
+        letter = Character.toLowerCase(letter);
+        incrementRotor();
+        return order[((int) letter) - 97];
+    }
+
     public String toString() {
-        return Arrays.toString(getOrder());
+        return Arrays.toString(order);
     }
 }
