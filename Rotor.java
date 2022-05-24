@@ -1,12 +1,17 @@
 import java.util.Arrays;
 
 public class Rotor {
+    static int numberOfRotors = 0;
     private char[] order = new char[26];
     private int incrementation;
+    private int rotorNumber;
+    
 
     public Rotor(char[] order) {
         this.order = order;
         incrementation = 0;
+        numberOfRotors++;
+        rotorNumber = numberOfRotors;
     }
 
     public void incrementRotor() {
@@ -47,6 +52,6 @@ public class Rotor {
     }
 
     public String toString() {
-        return Arrays.toString(order);
+        return "Rotor " + rotorNumber + ": " + Arrays.toString(order);
     }
 }
