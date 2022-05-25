@@ -29,27 +29,32 @@ public class Rotor {
         isAvailable = available;
     }
 
-    //increment rotor by one
-    public void incrementRotor(int pos) {
-        char position = order[pos];
-        for(int rotorPass = 0; rotorPass < numPasses; rotorPass++) {
+    //increment rotor by one, checks if the other rotors need turning (every 26)
+    private void incrementRotor() {
+        //Increment rotor 1
+        if(rotorNum == 1) 
+            rONECount++;
 
-        }
-        
+        //increment rotor 2 if rotor 1 goes 1 full revolution
+        if(rONECount > 26)
+            rTWOCount++;
 
-//take in a letter
-//after that, find the letter's pos (on the a-z alphabet) on the rotor 1 and that is the new letter
-//go through rotors 2, 3, 2, 1, and then that is the final letter
+        //increment rtor 3 if rotor 2 goes 1 full revolution
+        if(rTWOCount > 26)
+            rTHREECount++;
 
 
+        //In the case that any of the counts go over 26, 
+        //bring them back to 1
+        if(rONECount > 26)
+            rONECount = rONECount % 26;
 
+        if(rTWOCount > 26)
+            rTWOCount = rTWOCount % 26;
 
-            order[(pos) % 26] =  order[i];
-            pos++;
+        if(rTHREECount > 26)
+            rTHREECount = rTHREECount % 26;
 
-        order[0] = lastChar;
-        position++;
-        }
 
     }
 
@@ -66,9 +71,9 @@ public class Rotor {
         System.out.println(this);
     }
 
-    public char convertChar(Character letter) {
+    public char getCharInPos(Character letter) {
         letter = Character.toLowerCase(letter);
-        incrementRotor((int) letter - 97);
+        incrementRotor();
         return order[((int) letter) - 97];
     }
 

@@ -1,4 +1,3 @@
-import java.security.CryptoPrimitive;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -63,20 +62,26 @@ public class EnigmaMachine {
                 encodedMessage += letter;
             //in the case that the character is a letter, process it
             else
-                encodedMessage += processChar(letter);
+                encodedMessage += processChar(letter, selectedRotors.get(0), selectedRotors.get(1), selectedRotors.get(2));
         }
 
         return encodedMessage;
     }
 
-    //processes the letter
-    public static char processChar(char letter) {
-        for (int i = 0; i < selectedRotors.size(); i++) {
-            letter = selectedRotors.get(i).convertChar(letter);
-        }
-        return letter;
+    //processes the letter through all three
+    public static char processChar(char convert, Rotor first, Rotor second, Rotor third) {
+        char temp = first.getCharInPos(convert);
+        temp = second.getCharInPos(temp);
+        temp = third.getCharInPos(temp);
+        //reflector here
+        temp = second.getCharInPos(temp);
+        temp = first.getCharInPos(temp);
+
+        return temp;
     }
 
+    //User selects rotors to use in the program
+    //rotors go into size
     private static void selectRotors(Scanner sc) {
         while (selectedRotors.size() < 3) {
             System.out.println("enter a number 1 - 5 that hasn't already been chosen");
