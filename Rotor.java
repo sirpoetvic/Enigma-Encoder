@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Rotor {
     static int numberOfRotors = 0;
@@ -12,9 +13,9 @@ public class Rotor {
     private int rotorNumber;
     private boolean isAvailable;
     
-    public Rotor(char[] order) {
+    public Rotor(char[] order, boolean isAvailable) {
         this.order = order;
-        isAvailable = true;
+        this.isAvailable = isAvailable;
         numberOfRotors++;
         rotorNumber = numberOfRotors;
     }
@@ -34,33 +35,28 @@ public class Rotor {
         //Increment rotor 1
         rONECount++;
 
-        //increment rotor 2 if rotor 1 goes 1 full revolution
-        if(rONECount > 26)
+        //increment rotor 2 if rotor 1 goes 1 full revolution and keeps rotor 1 position under 26
+        if(rONECount > 26) {
             rTWOCount++;
+            rONECount %= 26;
+        }
 
-        //increment rtor 3 if rotor 2 goes 1 full revolution
-        if(rTWOCount > 26)
+        //increment rotor 3 if rotor 2 goes 1 full revolution keeps rotor 2 position under 26
+        if(rTWOCount > 26) {
             rTHREECount++;
+            rTWOCount %= 26;
+        }
 
-
-        //In the case that any of the counts go over 26, 
-        //bring them back to 1
-        if(rONECount > 26)
-            rONECount = rONECount % 26;
-
-        if(rTWOCount > 26)
-            rTWOCount = rTWOCount % 26;
-
+        //keeps rotor 3 position under 26
         if(rTHREECount > 26)
-            rTHREECount = rTHREECount % 26;
-
-
+            rTHREECount %= 26;
     }
 
     //Manually sets rotor position
-    public void setRotorPosition() {
+    public static void setRotorPositions(Scanner sc) {
         System.out.println("Would you like to set the rotor positions? (yes or no, y/n");
         System.out.println("The default values are 0, 0, 0");
+        sc.nextLine();
         String response = sc.nextLine().toLowerCase();
         if(response.startsWith("y")) {
             System.out.println("Enter the first rotor position: ");
@@ -91,6 +87,8 @@ public class Rotor {
 
         else if(rotorNum == 3)
             return rTHREECount;
+        else 
+            return -1;
     }
 
     public char getCharInPos(Character letter) {

@@ -5,12 +5,12 @@ import java.util.Scanner;
 public class EnigmaMachine {
 
     //5 possible rotors, choose 3 of them to use
-    static ArrayList<Rotor> rotors = new ArrayList(Arrays.asList(
-                                new Rotor("JGDQOXUSCAMIFRVTPNEWKBLZYH".toCharArray()),
-                                new Rotor("NTZPSFBOKMWRCJDIVLAEYUXHGQ".toCharArray()),
-                                new Rotor("JVIUBHTCDYAKEQZPOSGXNRMWFL".toCharArray()),
-                                new Rotor("QYHOGNECVPUZTFDJAXWMKISRBL".toCharArray()),
-                                new Rotor("QWERTZUIOASDFGHJKPYXCVBNML".toCharArray())));
+    static ArrayList<Rotor> rotors = new ArrayList<Rotor>(Arrays.asList(
+                                new Rotor("JGDQOXUSCAMIFRVTPNEWKBLZYH".toCharArray(), true),
+                                new Rotor("NTZPSFBOKMWRCJDIVLAEYUXHGQ".toCharArray(), true),
+                                new Rotor("JVIUBHTCDYAKEQZPOSGXNRMWFL".toCharArray(), true),
+                                new Rotor("QYHOGNECVPUZTFDJAXWMKISRBL".toCharArray(), true),
+                                new Rotor("QWERTZUIOASDFGHJKPYXCVBNML".toCharArray(), true)));
 
     //stores the rotors that are used in the machine (at current time)
     //originally empty
@@ -37,7 +37,7 @@ public class EnigmaMachine {
 
         System.out.println("");
 
-        setRotorPosition();
+        Rotor.setRotorPositions(sc);
     }
     
     //encoding the message
@@ -77,23 +77,14 @@ public class EnigmaMachine {
     //rotors go into selectedRotors arrayList
     private static void selectRotors(Scanner sc) {
         while (selectedRotors.size() < 3) {
-            System.out.println("Select one of the following rotors:");
-            //prints available rotors
-            for (int i = 0; i < rotors.size(); i++) {
-                if(rotors.get(i).isAvailableCheck()) {
-                    System.out.println(rotors.get(i));
-                    rotors.get(i).setAvailability(false);
-                }
-            }
-
+            System.out.println("enter a number 1 - 5 that hasn't already been chosen");
             int rotorNum = sc.nextInt();
             System.out.println();
 
             boolean needToRedo = false;
             for (int i = 0; i < selectedRotors.size(); i++) {
-                //checks if the rotor is available, if not, then catch that
-                if (!selectedRotors.get(i).isAvailableCheck) {
-                    System.out.println("You've already selected that rotor, try again.");
+                if (rotorNum == selectedRotors.get(i).getRotorNum()) {
+                    System.out.println("You've already selected that rotor, try again");
                     needToRedo = true;
                     break;
                 }
@@ -105,10 +96,8 @@ public class EnigmaMachine {
             try {
                 System.out.println("Selected " + rotors.get(rotorNum-1));
                 selectedRotors.add(rotors.get(rotorNum-1));
-                rotors.get(rotorNum-1).setAvailability(false);
             } catch (IndexOutOfBoundsException e) {
                 System.out.println("That's not a valid rotor! >:(");
-                System.out.println("Try again.");
                 continue;
             }
 
