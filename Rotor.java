@@ -5,15 +5,22 @@ public class Rotor {
     private char[] order = new char[26];
     private int incrementation;
     private int rotorNumber;
+    private boolean isAvailable;
     
-
     public Rotor(char[] order) {
         this.order = order;
+        this.isAvailable = isAvailable;
         incrementation = 0;
         numberOfRotors++;
         rotorNumber = numberOfRotors;
     }
 
+    //checks if rotor is available for use
+    public boolean isAvailableCheck() {
+        return isAvailable;
+    }
+
+    //increment rotor by one
     public void incrementRotor() {
         char lastChar = order[25];
 
