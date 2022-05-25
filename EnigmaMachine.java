@@ -28,6 +28,7 @@ public class EnigmaMachine {
         for (int i = 0; i < rotors.size(); i++) {
             if(rotors.get(i).isAvailableCheck()) 
                 System.out.println(rotors.get(i));
+                rotors.get(i).setAvailability(false);
         }
 
         System.out.println();
@@ -35,7 +36,7 @@ public class EnigmaMachine {
         selectRotors(sc);
 
         //prints 
-        System.out.println("Alpha b: " + Arrays.toString("ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray));
+        System.out.println("Alpha b: " + Arrays.toString("ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray()));
 
         System.out.println("Selected Rotors:");
 
@@ -47,13 +48,20 @@ public class EnigmaMachine {
         System.out.println("");
     }
     
+    //encoding the message
     public static String encodeMessage(String message) {
         String encodedMessage = "";
 
+        //for as long as the message is
         for (int i = 0; i < message.length(); i++) {
+            //specific letter from word
             char letter = message.charAt(i);
-            if (letter == ' ')
+            
+            //in the case that the character is anything but a letter, just add
+            //it to the encoded message string
+            if (!Character.isLetter(letter))
                 encodedMessage += letter;
+            //in the case that the character is a letter, process it
             else
                 encodedMessage += processChar(letter);
         }
@@ -61,6 +69,7 @@ public class EnigmaMachine {
         return encodedMessage;
     }
 
+    //processes the letter
     public static char processChar(char letter) {
         for (int i = 0; i < selectedRotors.size(); i++) {
             letter = selectedRotors.get(i).convertChar(letter);

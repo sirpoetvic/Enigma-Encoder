@@ -2,15 +2,20 @@ import java.util.Arrays;
 
 public class Rotor {
     static int numberOfRotors = 0;
+    static int rONECount = 0;
+    static int rTWOCount = 0;
+    static int rTHREECount = 0;
+    //Number of passes that the word makes through all of the rotors
+    static final int numPasses = 6;
     private char[] order = new char[26];
-    private int incrementation;
+    private int position;
     private int rotorNumber;
     private boolean isAvailable;
     
     public Rotor(char[] order) {
         this.order = order;
-        this.isAvailable = isAvailable;
-        incrementation = 0;
+        isAvailable = true;
+        position = 0;
         numberOfRotors++;
         rotorNumber = numberOfRotors;
     }
@@ -20,31 +25,40 @@ public class Rotor {
         return isAvailable;
     }
 
-    //increment rotor by one
-    public void incrementRotor() {
-        char lastChar = order[25];
+    public void setAvailability(boolean available) {
+        isAvailable = available;
+    }
 
-        for (int i = order.length - 2; i >= 0 ; i--)
-            order[(i+1) % 26] =  order[i];
+    //increment rotor by one
+    public void incrementRotor(int pos) {
+        char position = order[pos];
+        for(int rotorPass = 0; rotorPass < numPasses; rotorPass++) {
+
+        }
+        
+
+//take in a letter
+//after that, find the letter's pos (on the a-z alphabet) on the rotor 1 and that is the new letter
+//go through rotors 2, 3, 2, 1, and then that is the final letter
+
+
+
+
+            order[(pos) % 26] =  order[i];
+            pos++;
 
         order[0] = lastChar;
-        incrementation++;
+        position++;
+        }
+
     }
 
     public void setRotorPosition(int setPosition) {
-        setPosition -= incrementation;
-
-        if (setPosition < 0) {
-            setPosition += 26;
-        }
-
-        for (int i = 0; i < setPosition; i++) {
-            incrementRotor();
-        }
+        position = setPosition;
     }
 
-    public int getIncrementation() {
-        return incrementation;
+    public int getPosition() {
+        return position;
     }
 
     public void setAndPrint(int setPosition) {
@@ -54,7 +68,7 @@ public class Rotor {
 
     public char convertChar(Character letter) {
         letter = Character.toLowerCase(letter);
-        incrementRotor();
+        incrementRotor((int) letter - 97);
         return order[((int) letter) - 97];
     }
 
