@@ -32,7 +32,7 @@ public class Rotor {
     //increment rotor by one, checks if the other rotors need turning (every 26)
     private void incrementRotor() {
         //Increment rotor 1
-        if(rotorNum == 1) 
+        if(rotorNumber == 1) 
             rONECount++;
 
         //increment rotor 2 if rotor 1 goes 1 full revolution
