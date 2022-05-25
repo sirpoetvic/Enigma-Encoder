@@ -74,7 +74,7 @@ public class EnigmaMachine {
     }
 
     //User selects rotors to use in the program
-    //rotors go into size
+    //rotors go into selectedRotors arrayList
     private static void selectRotors(Scanner sc) {
         while (selectedRotors.size() < 3) {
             System.out.println("Select one of the following rotors:");

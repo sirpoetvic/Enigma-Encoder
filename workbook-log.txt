@@ -1,0 +1,6 @@
+The code should theoretically work.
+Changes have been made to make the positions of the rotors be static, so that accessing individual 
+rotors is unnecessary. This allows for easy resets of the program, in which putting those values to 0 
+and clearing the selectedRotors arrayList would be all to reset.
+
+Implement an option to keep going while the user wants to continue.

@@ -59,7 +59,7 @@ public class Rotor {
 
     //Manually sets rotor position
     public void setRotorPosition() {
-        System.out.println("Would you like to set the rotor positions?");
+        System.out.println("Would you like to set the rotor positions? (yes or no, y/n");
         System.out.println("The default values are 0, 0, 0");
         String response = sc.nextLine().toLowerCase();
         if(response.startsWith("y")) {
@@ -75,6 +75,7 @@ public class Rotor {
         }
         else {
             //defaulting to 0 for all position values
+            System.out.println("Alright, the default values are 0, 0, 0");
             rONECount = 0;
             rTWOCount = 0;
             rTHREECount = 0;
