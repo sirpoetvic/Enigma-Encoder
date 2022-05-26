@@ -1,4 +1,8 @@
 import java.util.Arrays;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 948fe56d819acd57eb07327de7ab07a2fdf2805b
 public class Rotor {
     static int numberOfRotors = 0;
     //Number of passes that the word makes through all of the rotors

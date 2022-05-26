@@ -108,6 +108,8 @@ public class EnigmaMachine {
             //defaulting to 0 for all position values
             System.out.println("Alright, the default values are 0, 0, 0");
             sc.nextLine();
+            sc.nextLine();
+            sc.nextLine();
         }
     }
 
