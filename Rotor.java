@@ -2,15 +2,14 @@ import java.util.Arrays;
 public class Rotor {
     static int numberOfRotors = 0;
     //Number of passes that the word makes through all of the rotors
-    static final int numPasses = 6;
     private char[] order = new char[26];
     //Assigned 1-5, reference arraylist rotors in EngimaMachine.java
     private int position;
     private int rotorNumber;
     
-    public Rotor(char[] order, int position) {
+    public Rotor(char[] order) {
         this.order = order;
-        this.position = position;
+        position = 0;
         numberOfRotors++;
         rotorNumber = numberOfRotors;
     }

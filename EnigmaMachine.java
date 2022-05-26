@@ -5,11 +5,11 @@ import java.util.Scanner;
 public class EnigmaMachine {
 
     //5 possible rotors, choose 3 of them to use
-    static Rotor[] rotors = { new Rotor("JGDQOXUSCAMIFRVTPNEWKBLZYH".toCharArray(), 0),
-                                new Rotor("NTZPSFBOKMWRCJDIVLAEYUXHGQ".toCharArray(), 0),
-                                new Rotor("JVIUBHTCDYAKEQZPOSGXNRMWFL".toCharArray(), 0),
-                                new Rotor("QYHOGNECVPUZTFDJAXWMKISRBL".toCharArray(), 0),
-                                new Rotor("QWERTZUIOASDFGHJKPYXCVBNML".toCharArray(), 0)};
+    static Rotor[] rotors = { new Rotor("JGDQOXUSCAMIFRVTPNEWKBLZYH".toCharArray()),
+                                new Rotor("NTZPSFBOKMWRCJDIVLAEYUXHGQ".toCharArray()),
+                                new Rotor("JVIUBHTCDYAKEQZPOSGXNRMWFL".toCharArray()),
+                                new Rotor("QYHOGNECVPUZTFDJAXWMKISRBL".toCharArray()),
+                                new Rotor("QWERTZUIOASDFGHJKPYXCVBNML".toCharArray())};
 
     //stores the rotors that are used in the machine (at current time)
     //originally empty
@@ -55,7 +55,7 @@ public class EnigmaMachine {
             //in the case that the character is a letter, process it
             else
                 encodedMessage += processChar(letter);
-                encodedMessage += selectedRotors.get(0).getRotorPos();
+            encodedMessage += selectedRotors.get(0).getRotorPos();
         }
 
         return encodedMessage;
@@ -78,20 +78,21 @@ public class EnigmaMachine {
 
         //keeps rotor 3 position under 26
         if(selectedRotors.get(2).getRotorPos() > 26)
-        selectedRotors.get(2).setRotorPosition(selectedRotors.get(2).getRotorPos() % 26);
+            selectedRotors.get(2).setRotorPosition(selectedRotors.get(2).getRotorPos() % 26);
+        
         temp = selectedRotors.get(1).getCharInPos(temp);
         temp = selectedRotors.get(2).getCharInPos(temp);
         //reflector here
-        temp = selectedRotors.get(1).getCharInPos(temp);
-        temp = selectedRotors.get(0).getCharInPos(temp);
+        // temp = selectedRotors.get(1).getCharInPos(temp);
 
-        return selectedRotors.get(0).getCharInPos(temp);
+        return temp;
     }
 
     //Manually sets rotor position
     public static void setRotorPositions(Scanner sc) {
         System.out.println("The default values are 0, 0, 0");
         System.out.println("Would you like to set the rotor positions? (yes or no, y/n)");
+        sc.nextLine();
         String response = sc.nextLine().toLowerCase();
         if(response.startsWith("y")) {
             System.out.println("Enter the first rotor position: ");
@@ -104,13 +105,9 @@ public class EnigmaMachine {
             rotorPos = Integer.parseInt(sc.nextLine());
             selectedRotors.get(2).setRotorPosition(rotorPos);
         }
-        else {
+        else
             //defaulting to 0 for all position values
             System.out.println("Alright, the default values are 0, 0, 0");
-            sc.nextLine();
-            sc.nextLine();
-            sc.nextLine();
-        }
     }
 
     //User selects rotors to use in the program
