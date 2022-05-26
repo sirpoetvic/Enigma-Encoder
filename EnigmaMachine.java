@@ -6,17 +6,17 @@ public class EnigmaMachine {
 
     //5 possible rotors, choose 3 of them to use
     static ArrayList<Rotor> rotors = new ArrayList<Rotor>(Arrays.asList(
-                                new Rotor("JGDQOXUSCAMIFRVTPNEWKBLZYH".toCharArray(), true),
-                                new Rotor("NTZPSFBOKMWRCJDIVLAEYUXHGQ".toCharArray(), true),
-                                new Rotor("JVIUBHTCDYAKEQZPOSGXNRMWFL".toCharArray(), true),
-                                new Rotor("QYHOGNECVPUZTFDJAXWMKISRBL".toCharArray(), true),
-                                new Rotor("QWERTZUIOASDFGHJKPYXCVBNML".toCharArray(), true)));
+                                new Rotor("JGDQOXUSCAMIFRVTPNEWKBLZYH".toCharArray(), 0),
+                                new Rotor("NTZPSFBOKMWRCJDIVLAEYUXHGQ".toCharArray(), 0),
+                                new Rotor("JVIUBHTCDYAKEQZPOSGXNRMWFL".toCharArray(), 0),
+                                new Rotor("QYHOGNECVPUZTFDJAXWMKISRBL".toCharArray(), 0),
+                                new Rotor("QWERTZUIOASDFGHJKPYXCVBNML".toCharArray(), 0)));
 
     //stores the rotors that are used in the machine (at current time)
     //originally empty
     static ArrayList<Rotor> selectedRotors = new ArrayList<>();
 
-    //Performs intro tasks
+    //Performs intro tasks 
     //Enter rotor numbers, store in selectedRotors 
     public static void introduction(Scanner sc) {
         System.out.println("Hello! Welcome to the Enigma Machine simulator.");
@@ -37,7 +37,7 @@ public class EnigmaMachine {
 
         System.out.println("");
 
-        Rotor.setRotorPositions(sc);
+        setRotorPositions(sc);
     }
     
     //encoding the message
@@ -55,22 +55,61 @@ public class EnigmaMachine {
                 encodedMessage += letter;
             //in the case that the character is a letter, process it
             else
-                encodedMessage += processChar(letter, selectedRotors.get(0), selectedRotors.get(1), selectedRotors.get(2));
+                encodedMessage += processChar(letter);
         }
 
         return encodedMessage;
     }
 
     //processes the letter through all three
-    public static char processChar(char convert, Rotor first, Rotor second, Rotor third) {
-        char temp = first.getCharInPos(convert);
-        temp = second.getCharInPos(temp);
-        temp = third.getCharInPos(temp);
-        //reflector here
-        temp = second.getCharInPos(temp);
-        temp = first.getCharInPos(temp);
+    public static char processChar(char convert) {
+        char temp = selectedRotors.get(0).getCharInPos(convert);
+        selectedRotors.get(0).incrementRotor();
+        if(selectedRotors.get(0).getRotorPos() > 26) {
+            selectedRotors.get(1).incrementRotor();
+            selectedRotors.get(0).setRotorPosition(selectedRotors.get(0).getRotorPos() % 26);
+        }
 
-        return temp;
+        //increment rotor 3 if rotor 2 goes 1 full revolution keeps rotor 2 position under 26
+        if(selectedRotors.get(1).getRotorPos() > 26) {
+            selectedRotors.get(2).incrementRotor();
+            selectedRotors.get(1).setRotorPosition(selectedRotors.get(1).getRotorPos() % 26);
+        }
+
+        //keeps rotor 3 position under 26
+        if(selectedRotors.get(2).getRotorPos() > 26)
+        selectedRotors.get(2).setRotorPosition(selectedRotors.get(2).getRotorPos() % 26);
+        temp = selectedRotors.get(1).getCharInPos(temp);
+        temp = selectedRotors.get(2).getCharInPos(temp);
+        //reflector here
+        temp = selectedRotors.get(1).getCharInPos(temp);
+        temp = selectedRotors.get(0).getCharInPos(temp);
+
+        return selectedRotors.get(0).getCharInPos(temp);
+    }
+
+    //Manually sets rotor position
+    public static void setRotorPositions(Scanner sc) {
+        System.out.println("Would you like to set the rotor positions? (yes or no, y/n");
+        System.out.println("The default values are 0, 0, 0");
+        sc.nextLine();
+        String response = sc.nextLine().toLowerCase();
+        if(response.startsWith("y")) {
+            System.out.println("Enter the first rotor position: ");
+            int rotorPos = Integer.parseInt(sc.nextLine());
+            selectedRotors.get(0).setRotorPosition(rotorPos);
+            System.out.println("Enter the second rotor position: ");
+            rotorPos = Integer.parseInt(sc.nextLine());
+            selectedRotors.get(1).setRotorPosition(rotorPos);
+            System.out.println("Enter the third rotor position: ");
+            rotorPos = Integer.parseInt(sc.nextLine());
+            selectedRotors.get(2).setRotorPosition(rotorPos);
+        }
+        else {
+            //defaulting to 0 for all position values
+            System.out.println("Alright, the default values are 0, 0, 0");
+            sc.nextLine();
+        }
     }
 
     //User selects rotors to use in the program

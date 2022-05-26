@@ -4,3 +4,26 @@ rotors is unnecessary. This allows for easy resets of the program, in which putt
 and clearing the selectedRotors arrayList would be all to reset.
 
 Implement an option to keep going while the user wants to continue.
+
+
+//increment rotor 2 if rotor 1 goes 1 full revolution and keeps rotor 1 position under 26
+        if(rONECount > 26) {
+            rTWOCount++;
+            rONECount %= 26;
+        }
+
+        //increment rotor 3 if rotor 2 goes 1 full revolution keeps rotor 2 position under 26
+        if(rTWOCount > 26) {
+            rTHREECount++;
+            rTWOCount %= 26;
+        }
+
+        //keeps rotor 3 position under 26
+        if(rTHREECount > 26)
+            rTHREECount %= 26;
+
+
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+JGDQOXUSCAMIFRVTPNEWKBLZYH
+NTZPSFBOKMWRCJDIVLAEYUXHGQ
+JVIUBHTCDYAKEQZPOSGXNRMWFL
