@@ -56,6 +56,7 @@ public class EnigmaMachine {
             //in the case that the character is a letter, process it
             else
                 encodedMessage += processChar(letter);
+                encodedMessage += selectedRotors.get(0).getRotorPos();
         }
 
         return encodedMessage;
@@ -90,8 +91,8 @@ public class EnigmaMachine {
 
     //Manually sets rotor position
     public static void setRotorPositions(Scanner sc) {
-        System.out.println("Would you like to set the rotor positions? (yes or no, y/n");
         System.out.println("The default values are 0, 0, 0");
+        System.out.println("Would you like to set the rotor positions? (yes or no, y/n)");
         sc.nextLine();
         String response = sc.nextLine().toLowerCase();
         if(response.startsWith("y")) {
