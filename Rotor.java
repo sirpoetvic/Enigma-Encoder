@@ -47,7 +47,6 @@ public class Rotor {
 
     public char convertChar(Character letter) {
         letter = Character.toLowerCase(letter);
-        incrementRotor();
         return order[((int) letter) - 97];
     }
 

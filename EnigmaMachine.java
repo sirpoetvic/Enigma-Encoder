@@ -5,12 +5,11 @@ import java.util.Scanner;
 
 public class EnigmaMachine {
 
-    static ArrayList<Rotor> rotors = new ArrayList(Arrays.asList(
-                                new Rotor("JGDQOXUSCAMIFRVTPNEWKBLZYH".toCharArray()),
-                                new Rotor("NTZPSFBOKMWRCJDIVLAEYUXHGQ".toCharArray()),
-                                new Rotor("JVIUBHTCDYAKEQZPOSGXNRMWFL".toCharArray()),
-                                new Rotor("QYHOGNECVPUZTFDJAXWMKISRBL".toCharArray()),
-                                new Rotor("QWERTZUIOASDFGHJKPYXCVBNML".toCharArray())));
+    static Rotor[] rotors = {new Rotor("JGDQOXUSCAMIFRVTPNEWKBLZYH".toCharArray()),
+                             new Rotor("NTZPSFBOKMWRCJDIVLAEYUXHGQ".toCharArray()),
+                             new Rotor("JVIUBHTCDYAKEQZPOSGXNRMWFL".toCharArray()),
+                             new Rotor("QYHOGNECVPUZTFDJAXWMKISRBL".toCharArray()),
+                             new Rotor("QWERTZUIOASDFGHJKPYXCVBNML".toCharArray())};
 
     static ArrayList<Rotor> selectedRotors = new ArrayList<>();
 
@@ -18,8 +17,8 @@ public class EnigmaMachine {
         System.out.println("Hello! Please choose 3 of the following 5 rotors");
         System.out.println();
 
-        for (int i = 0; i < rotors.size(); i++) {
-            System.out.println(rotors.get(i));
+        for (int i = 0; i < rotors.length; i++) {
+            System.out.println(rotors[i]);
         }
 
         System.out.println();
@@ -39,8 +38,8 @@ public class EnigmaMachine {
         String encodedMessage = "";
 
         for (int i = 0; i < message.length(); i++) {
-            char letter = message.charAt(i);
-            if (letter == ' ')
+            Character letter = message.charAt(i);
+            if (!Character.isLetter(letter))
                 encodedMessage += letter;
             else
                 encodedMessage += processChar(letter);
@@ -50,9 +49,9 @@ public class EnigmaMachine {
     }
 
     public static char processChar(char letter) {
-        for (int i = 0; i < selectedRotors.size(); i++) {
+        for (int i = 0; i < selectedRotors.size(); i++)
             letter = selectedRotors.get(i).convertChar(letter);
-        }
+
         return letter;
     }
 
@@ -74,13 +73,13 @@ public class EnigmaMachine {
             if (needToRedo) 
                 continue;
 
-            try {
-                System.out.println("Selected " + rotors.get(rotorNum-1));
-                selectedRotors.add(rotors.get(rotorNum-1));
-            } catch (IndexOutOfBoundsException e) {
+            if(rotorNum > rotors.length - 1 || rotorNum - 1 < 0 ) {
                 System.out.println("That's not a valid rotor! >:(");
                 continue;
             }
+
+            System.out.println("Selected " + rotors[rotorNum-1]);
+            selectedRotors.add(rotors[rotorNum-1]);
 
             System.out.println();
         }
