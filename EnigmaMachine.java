@@ -5,12 +5,11 @@ import java.util.Scanner;
 public class EnigmaMachine {
 
     //5 possible rotors, choose 3 of them to use
-    static ArrayList<Rotor> rotors = new ArrayList<Rotor>(Arrays.asList(
-                                new Rotor("JGDQOXUSCAMIFRVTPNEWKBLZYH".toCharArray(), 0),
+    static Rotor[] rotors = { new Rotor("JGDQOXUSCAMIFRVTPNEWKBLZYH".toCharArray(), 0),
                                 new Rotor("NTZPSFBOKMWRCJDIVLAEYUXHGQ".toCharArray(), 0),
                                 new Rotor("JVIUBHTCDYAKEQZPOSGXNRMWFL".toCharArray(), 0),
                                 new Rotor("QYHOGNECVPUZTFDJAXWMKISRBL".toCharArray(), 0),
-                                new Rotor("QWERTZUIOASDFGHJKPYXCVBNML".toCharArray(), 0)));
+                                new Rotor("QWERTZUIOASDFGHJKPYXCVBNML".toCharArray(), 0)};
 
     //stores the rotors that are used in the machine (at current time)
     //originally empty
@@ -93,7 +92,6 @@ public class EnigmaMachine {
     public static void setRotorPositions(Scanner sc) {
         System.out.println("The default values are 0, 0, 0");
         System.out.println("Would you like to set the rotor positions? (yes or no, y/n)");
-        sc.nextLine();
         String response = sc.nextLine().toLowerCase();
         if(response.startsWith("y")) {
             System.out.println("Enter the first rotor position: ");
@@ -116,6 +114,11 @@ public class EnigmaMachine {
     //User selects rotors to use in the program
     //rotors go into selectedRotors arrayList
     private static void selectRotors(Scanner sc) {
+
+        for (int i = 0; i < rotors.length; i++) {
+            System.out.println(rotors[i]);
+        }
+
         while (selectedRotors.size() < 3) {
             System.out.println("enter a number 1 - 5 that hasn't already been chosen");
             int rotorNum = sc.nextInt();
@@ -134,8 +137,8 @@ public class EnigmaMachine {
                 continue;
 
             try {
-                System.out.println("Selected " + rotors.get(rotorNum-1));
-                selectedRotors.add(rotors.get(rotorNum-1));
+                System.out.println("Selected " + rotors[rotorNum-1]);
+                selectedRotors.add(rotors[rotorNum-1]);
             } catch (IndexOutOfBoundsException e) {
                 System.out.println("That's not a valid rotor! >:(");
                 continue;

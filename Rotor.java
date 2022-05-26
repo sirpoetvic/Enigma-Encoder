@@ -1,6 +1,4 @@
 import java.util.Arrays;
-import java.util.Scanner;
-
 public class Rotor {
     static int numberOfRotors = 0;
     //Number of passes that the word makes through all of the rotors
@@ -17,7 +15,7 @@ public class Rotor {
         rotorNumber = numberOfRotors;
     }
 
-    //increment rotor by one, checks if the other rotors need turning (every 26)
+    //increment rotor by one
     public void incrementRotor() {
         position++;
     }
