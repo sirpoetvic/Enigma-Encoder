@@ -10,10 +10,43 @@ public class EnigmaMachine {
                                 new Rotor("JVIUBHTCDYAKEQZPOSGXNRMWFL".toCharArray()),
                                 new Rotor("QYHOGNECVPUZTFDJAXWMKISRBL".toCharArray()),
                                 new Rotor("QWERTZUIOASDFGHJKPYXCVBNML".toCharArray())};
+    
+    //i know that this is not a plugboard, but the reflector and plugboard act basically the same
+    //technically the plugboard should be modular and be able to be changed but idk if we have time for that
+    //so this is going to be how it's going to work for now
+    static PlugBoard reflector = new PlugBoard(new String[] {
+        "EJ",
+        "MZ",
+        "AL",
+        "YX",
+        "VB",
+        "WF",
+        "CR",
+        "QU",
+        "ON",
+        "TS",
+        "PI",
+        "KH",
+        "GD"
+    });
+    
 
     //stores the rotors that are used in the machine (at current time)
     //originally empty
     static ArrayList<Rotor> selectedRotors = new ArrayList<>();
+
+    static PlugBoard pBoard = new PlugBoard(new String[] {
+        "AU",
+        "BL",
+        "OF",
+        "QD",
+        "NY",
+        "RI",
+        "XP",
+        "EV",
+        "SK",
+        "ZM"
+    });
 
     //Performs intro tasks 
     //Enter rotor numbers, store in selectedRotors 
@@ -55,36 +88,56 @@ public class EnigmaMachine {
             //in the case that the character is a letter, process it
             else
                 encodedMessage += processChar(letter);
-            encodedMessage += selectedRotors.get(0).getRotorPos();
+            // encodedMessage += selectedRotors.get(0).getRotorPos();
         }
 
         return encodedMessage;
     }
 
-    //processes the letter through all three
-    public static char processChar(char convert) {
-        char temp = selectedRotors.get(0).getCharInPos(convert);
+    public static void motorIncrementations() {
         selectedRotors.get(0).incrementRotor();
-        if(selectedRotors.get(0).getRotorPos() > 26) {
+
+        if(selectedRotors.get(0).getRotorPos() > 25) {
             selectedRotors.get(1).incrementRotor();
-            selectedRotors.get(0).setRotorPosition(selectedRotors.get(0).getRotorPos() % 26);
+            selectedRotors.get(0).setRotorPosition(0);
         }
 
         //increment rotor 3 if rotor 2 goes 1 full revolution keeps rotor 2 position under 26
-        if(selectedRotors.get(1).getRotorPos() > 26) {
+        if(selectedRotors.get(1).getRotorPos() > 25) {
             selectedRotors.get(2).incrementRotor();
-            selectedRotors.get(1).setRotorPosition(selectedRotors.get(1).getRotorPos() % 26);
+            selectedRotors.get(1).setRotorPosition(0);
         }
 
         //keeps rotor 3 position under 26
-        if(selectedRotors.get(2).getRotorPos() > 26)
-            selectedRotors.get(2).setRotorPosition(selectedRotors.get(2).getRotorPos() % 26);
-        
-        temp = selectedRotors.get(1).getCharInPos(temp);
-        temp = selectedRotors.get(2).getCharInPos(temp);
-        //reflector here
-        // temp = selectedRotors.get(1).getCharInPos(temp);
+        if(selectedRotors.get(2).getRotorPos() > 25)
+            selectedRotors.get(2).setRotorPosition(0);
+    }
 
+    //processes the letter through all three
+    public static char processChar(char letter) {
+        char temp = pBoard.swapChar(letter);
+        System.out.println(temp);
+
+        motorIncrementations();
+
+        temp = selectedRotors.get(0).convertChar(temp);
+        System.out.println(temp);
+        temp = selectedRotors.get(1).convertChar(temp);
+        System.out.println(temp);
+        temp = selectedRotors.get(2).convertChar(temp);
+        System.out.println(temp);
+        
+        temp = reflector.swapChar(temp);
+        System.out.println(temp);
+
+        temp = selectedRotors.get(2).convertChar(temp);
+        System.out.println(temp);
+        temp = selectedRotors.get(1).convertChar(temp);
+        System.out.println(temp);
+        temp = selectedRotors.get(0).convertChar(temp);
+        System.out.println(temp);
+
+        temp = pBoard.swapChar(temp);
         return temp;
     }
 
@@ -95,15 +148,10 @@ public class EnigmaMachine {
         sc.nextLine();
         String response = sc.nextLine().toLowerCase();
         if(response.startsWith("y")) {
-            System.out.println("Enter the first rotor position: ");
-            int rotorPos = Integer.parseInt(sc.nextLine());
-            selectedRotors.get(0).setRotorPosition(rotorPos);
-            System.out.println("Enter the second rotor position: ");
-            rotorPos = Integer.parseInt(sc.nextLine());
-            selectedRotors.get(1).setRotorPosition(rotorPos);
-            System.out.println("Enter the third rotor position: ");
-            rotorPos = Integer.parseInt(sc.nextLine());
-            selectedRotors.get(2).setRotorPosition(rotorPos);
+            for (int i = 0; i < selectedRotors.size(); i++) {
+                System.out.println("Enter the position for rotor " + selectedRotors.get(i).getRotorNum() + ":");
+                selectedRotors.get(0).setRotorPosition(Integer.parseInt(sc.nextLine()));
+            }
         }
         else
             //defaulting to 0 for all position values
@@ -131,7 +179,6 @@ public class EnigmaMachine {
                     break;
                 }
             }
-
             if (needToRedo) 
                 continue;
 
@@ -145,5 +192,26 @@ public class EnigmaMachine {
 
             System.out.println();
         }
+    }
+
+    public static void printMachineSettings() {
+
+        System.out.println();
+        System.out.println("***** MACHINE SETTINGS *****");
+        System.out.println();
+
+        System.out.println("Rotors:");
+        for (Rotor rotor : selectedRotors) {
+            System.err.println(rotor);
+        }
+
+        System.out.println();
+
+        System.out.println("Plug Board:");
+        pBoard.printPlugBoard();
+
+        System.out.println("Reflector:");
+        reflector.printPlugBoard();
+
     }
 }
