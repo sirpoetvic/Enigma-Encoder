@@ -26,9 +26,22 @@ public class Rotor {
         position = pos;
     }
 
-    public char convertChar(Character letter) {
-        letter = Character.toLowerCase(letter);
-        return order[((((int) letter) - 97) + position) % 26];
+    public char convertCharForward(Character letter) {
+        letter = Character.toUpperCase(letter);
+        return order[((((int) letter) - 65) + position) % 26];
+    }
+
+    public char convertCharBackward(Character letter) {
+        letter = Character.toUpperCase(letter);
+        return (char) (((getLetterIndex(letter) + position) % 26) + 65);
+    }
+
+    public int getLetterIndex(char letter) {
+        for (int i = 0; i < order.length; i++) {
+            if (letter == order[i])
+                return i;
+        }
+        return -1;
     }
 
     public String toString() {

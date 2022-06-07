@@ -14,22 +14,7 @@ public class EnigmaMachine {
     //i know that this is not a plugboard, but the reflector and plugboard act basically the same
     //technically the plugboard should be modular and be able to be changed but idk if we have time for that
     //so this is going to be how it's going to work for now
-    static PlugBoard reflector = new PlugBoard(new String[] {
-        "EJ",
-        "MZ",
-        "AL",
-        "YX",
-        "VB",
-        "WF",
-        "CR",
-        "QU",
-        "ON",
-        "TS",
-        "PI",
-        "KH",
-        "GD"
-    });
-    
+    static Reflector reflector = new Reflector("EJMZALYXVBWFCRQUONTSPIKHGD");
 
     //stores the rotors that are used in the machine (at current time)
     //originally empty
@@ -56,9 +41,6 @@ public class EnigmaMachine {
         System.out.println();
 
         selectRotors(sc);
-
-        //prints alphabet for reference
-        System.out.println("Alpha b: " + Arrays.toString("ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray()));
 
         System.out.println("Selected Rotors:");
 
@@ -95,8 +77,6 @@ public class EnigmaMachine {
     }
 
     public static void motorIncrementations() {
-        selectedRotors.get(0).incrementRotor();
-
         if(selectedRotors.get(0).getRotorPos() > 25) {
             selectedRotors.get(1).incrementRotor();
             selectedRotors.get(0).setRotorPosition(0);
@@ -111,30 +91,34 @@ public class EnigmaMachine {
         //keeps rotor 3 position under 26
         if(selectedRotors.get(2).getRotorPos() > 25)
             selectedRotors.get(2).setRotorPosition(0);
+        
+        selectedRotors.get(0).incrementRotor();
     }
 
     //processes the letter through all three
     public static char processChar(char letter) {
+        motorIncrementations();
+        
         char temp = pBoard.swapChar(letter);
         System.out.println(temp);
 
-        motorIncrementations();
+        temp = selectedRotors.get(0).convertCharForward(temp);
+        System.out.println(temp);
 
-        temp = selectedRotors.get(0).convertChar(temp);
+        temp = selectedRotors.get(1).convertCharForward(temp);
         System.out.println(temp);
-        temp = selectedRotors.get(1).convertChar(temp);
-        System.out.println(temp);
-        temp = selectedRotors.get(2).convertChar(temp);
+
+        temp = selectedRotors.get(2).convertCharForward(temp);
         System.out.println(temp);
         
-        temp = reflector.swapChar(temp);
+        temp = reflector.reflect(temp);
         System.out.println(temp);
 
-        temp = selectedRotors.get(2).convertChar(temp);
+        temp = selectedRotors.get(2).convertCharBackward(temp);
         System.out.println(temp);
-        temp = selectedRotors.get(1).convertChar(temp);
+        temp = selectedRotors.get(1).convertCharBackward(temp);
         System.out.println(temp);
-        temp = selectedRotors.get(0).convertChar(temp);
+        temp = selectedRotors.get(0).convertCharBackward(temp);
         System.out.println(temp);
 
         temp = pBoard.swapChar(temp);
@@ -211,7 +195,7 @@ public class EnigmaMachine {
         pBoard.printPlugBoard();
 
         System.out.println("Reflector:");
-        reflector.printPlugBoard();
+        reflector.printReflector();
 
     }
 }
