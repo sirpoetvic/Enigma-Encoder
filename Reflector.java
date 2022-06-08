@@ -1,5 +1,6 @@
+import java.util.Arrays;
+
 public class Reflector {
-    
     char[] order;
 
     public Reflector (String order) {
@@ -11,9 +12,7 @@ public class Reflector {
         return (char) order[letter - 65];
     } 
 
-    public void printReflector() {
-        for (int i = 65; i < 91; i++) {
-            System.out.println(((char) i) + "->" + reflect((char) i));
-        }
+    public String toString() {
+        return "Reflector: " + Arrays.toString(order);
     }
 }

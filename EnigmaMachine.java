@@ -9,16 +9,21 @@ public class EnigmaMachine {
                                 new Rotor("NTZPSFBOKMWRCJDIVLAEYUXHGQ".toCharArray()),
                                 new Rotor("JVIUBHTCDYAKEQZPOSGXNRMWFL".toCharArray()),
                                 new Rotor("QYHOGNECVPUZTFDJAXWMKISRBL".toCharArray()),
-                                new Rotor("QWERTZUIOASDFGHJKPYXCVBNML".toCharArray())};
-    
-    //i know that this is not a plugboard, but the reflector and plugboard act basically the same
-    //technically the plugboard should be modular and be able to be changed but idk if we have time for that
-    //so this is going to be how it's going to work for now
-    static Reflector reflector = new Reflector("EJMZALYXVBWFCRQUONTSPIKHGD");
+                                new Rotor("QWERTZUIOASDFGHJKPYXCVBNML".toCharArray())
+                            };
+
+    static NewRotor[] newRotors = { new NewRotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 'Q'),
+                                    new NewRotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", 'E'),
+                                    new NewRotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", 'V'),
+                                    new NewRotor("ESOVPZJAYQUIRHXLNFTGKDCMWB", 'J'),
+                                    new NewRotor("VZBRGITYUPSDNHLXAWMJQOFECK", 'Z')
+                                };
+
+    static Reflector selectedReflector = new Reflector("EJMZALYXVBWFCRQUONTSPIKHGD");
 
     //stores the rotors that are used in the machine (at current time)
     //originally empty
-    static ArrayList<Rotor> selectedRotors = new ArrayList<>();
+    static ArrayList<NewRotor> selectedRotors = new ArrayList<>();
 
     static PlugBoard pBoard = new PlugBoard(new String[] {
         "AU",
@@ -35,7 +40,7 @@ public class EnigmaMachine {
 
     public static void setDefaultSettings() {
         for (int i = 0; i < 3; i++) {
-            selectedRotors.add(rotors[i]);
+            selectedRotors.add(newRotors[i]);
         }
     }
 
@@ -83,32 +88,83 @@ public class EnigmaMachine {
     }
 
     public static void motorIncrementations() {
-        if(selectedRotors.get(0).getRotorPos() > 25) {
-            selectedRotors.get(1).incrementRotor();
-            selectedRotors.get(0).setRotorPosition(0);
-        }
+        // if(selectedRotors.get(0).getRotorPos() > 25) {
+        //     selectedRotors.get(1).incrementRotor();
+        //     selectedRotors.get(0).setRotorPosition(0);
+        // }
 
-        //increment rotor 3 if rotor 2 goes 1 full revolution keeps rotor 2 position under 26
-        if(selectedRotors.get(1).getRotorPos() > 25) {
-            selectedRotors.get(2).incrementRotor();
-            selectedRotors.get(1).setRotorPosition(0);
-        }
+        // //increment rotor 3 if rotor 2 goes 1 full revolution keeps rotor 2 position under 26
+        // if(selectedRotors.get(1).getRotorPos() > 25) {
+        //     selectedRotors.get(2).incrementRotor();
+        //     selectedRotors.get(1).setRotorPosition(0);
+        // }
 
-        //keeps rotor 3 position under 26
-        if(selectedRotors.get(2).getRotorPos() > 25)
-            selectedRotors.get(2).setRotorPosition(0);
+        // //keeps rotor 3 position under 26
+        // if(selectedRotors.get(2).getRotorPos() > 25)
+        //     selectedRotors.get(2).setRotorPosition(0);
         
-        selectedRotors.get(0).incrementRotor();
+        // selectedRotors.get(0).incrementRotor();
+
+        if (selectedRotors.get(0).getLeft()[0] == selectedRotors.get(0).getNotch()
+            && selectedRotors.get(1).getLeft()[0] == selectedRotors.get(1).getNotch()) {
+            
+            selectedRotors.get(0).rotate(); 
+            selectedRotors.get(1).rotate();
+            selectedRotors.get(2).rotate();
+
+        } else if (selectedRotors.get(1).getLeft()[0] == selectedRotors.get(1).getNotch()) {
+            // double skip anomaly, weird edge case situation in the real enigma machine, i learned about it while researching
+            selectedRotors.get(0).rotate();
+            selectedRotors.get(1).rotate();
+            selectedRotors.get(2).rotate();
+
+        } else if (selectedRotors.get(0).getLeft()[0] == selectedRotors.get(0).getNotch()) {
+            
+            selectedRotors.get(0).rotate();
+            selectedRotors.get(1).rotate();
+            
+        } else {
+            selectedRotors.get(0).rotate();
+        }
     }
 
     //processes the letter through all three
-    public static char processChar(char letter) {
+    public static char processChar(int input) {
         motorIncrementations();
-        
-        char temp = pBoard.swapChar(letter);
-        System.out.print(temp);
 
-        temp = selectedRotors.get(0).convertCharForward(temp);
+        // System.out.println("initial input:" + (char) input);
+        
+        input = pBoard.swapChar((char) (input)) - 65;
+        // System.out.println("start plug:" + (char) (input + 65));
+
+        input = newRotors[2].forward(input);
+        // System.out.println("first rotor forward:" + (char) (input + 65));
+
+        input = newRotors[1].forward(input);
+        // System.out.println("second rotor forward:" + (char) (input + 65));
+
+        input = newRotors[0].forward(input);
+        // System.out.println("third rotor forward:" + (char) (input + 65));
+
+        input = selectedReflector.reflect((char) (input + 65)) - 65;
+        // System.out.println("reflection:" + (char) (input + 65));
+
+        input = newRotors[0].backward(input);
+        // System.out.println("third rotor backward:" + (char) (input + 65));
+
+        input = newRotors[1].backward(input);
+        // System.out.println("second rotor backward:" + (char) (input + 65));
+
+        input = newRotors[2].backward(input);
+        // System.out.println("first rotor backward:" + (char) (input + 65));
+
+        input = pBoard.swapChar((char) (input + 65));
+        // System.out.println("final plug:" + (char) (input));
+        
+        // char temp = pBoard.swapChar(letter);
+        // System.out.print(temp);
+
+        // temp = (char) selectedRotors.get(0).forward((char) temp);
         // System.out.println(temp);
 
         // temp = selectedRotors.get(1).convertCharForward(temp);
@@ -127,8 +183,8 @@ public class EnigmaMachine {
         // temp = selectedRotors.get(0).convertCharBackward(temp);
         // System.out.println(temp);
 
-        temp = pBoard.swapChar(temp);
-        return temp;
+        // temp = pBoard.swapChar(temp);
+        return (char) input;
     }
 
     //Manually sets rotor position
@@ -139,8 +195,9 @@ public class EnigmaMachine {
         String response = sc.nextLine().toLowerCase();
         if(response.startsWith("y")) {
             for (int i = 0; i < selectedRotors.size(); i++) {
-                System.out.println("Enter the position for rotor " + selectedRotors.get(i).getRotorNum() + ":");
-                selectedRotors.get(0).setRotorPosition(Integer.parseInt(sc.nextLine()));
+                System.out.println("Enter the position for rotor " + selectedRotors.get(i).getRotorNum() + "(between 1 & 25) :");
+                selectedRotors.get(0).setPosition(sc.nextInt());
+                sc.nextLine();
             }
         }
         else
@@ -152,8 +209,8 @@ public class EnigmaMachine {
     //rotors go into selectedRotors arrayList
     private static void selectRotors(Scanner sc) {
 
-        for (int i = 0; i < rotors.length; i++) {
-            System.out.println(rotors[i]);
+        for (int i = 0; i < newRotors.length; i++) {
+            System.out.println(newRotors[i]);
         }
 
         while (selectedRotors.size() < 3) {
@@ -173,8 +230,8 @@ public class EnigmaMachine {
                 continue;
 
             try {
-                System.out.println("Selected " + rotors[rotorNum-1]);
-                selectedRotors.add(rotors[rotorNum-1]);
+                System.out.println("Selected " + newRotors[rotorNum-1]);
+                selectedRotors.add(newRotors[rotorNum-1]);
             } catch (IndexOutOfBoundsException e) {
                 System.out.println("That's not a valid rotor! >:(");
                 continue;
@@ -191,7 +248,7 @@ public class EnigmaMachine {
         System.out.println();
 
         System.out.println("Rotors:");
-        for (Rotor rotor : selectedRotors) {
+        for (NewRotor rotor : selectedRotors) {
             System.err.println(rotor);
         }
 
@@ -201,7 +258,7 @@ public class EnigmaMachine {
         pBoard.printPlugBoard();
 
         System.out.println("Reflector:");
-        reflector.printReflector();
+        System.out.println(selectedReflector);;
 
     }
 }
