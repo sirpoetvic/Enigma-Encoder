@@ -33,8 +33,14 @@ public class EnigmaMachine {
         "ZM"
     });
 
+    public static void setDefaultSettings() {
+        for (int i = 0; i < 3; i++) {
+            selectedRotors.add(rotors[i]);
+        }
+    }
+
     //Performs intro tasks 
-    //Enter rotor numbers, store in selectedRotors 
+    //Enter rotor numbers, store in selectedRotors     
     public static void introduction(Scanner sc) {
         System.out.println("Hello! Welcome to the Enigma Machine simulator.");
         System.out.println("Please choose 3 of the following 5 rotors: ");
@@ -72,7 +78,7 @@ public class EnigmaMachine {
                 encodedMessage += processChar(letter);
             // encodedMessage += selectedRotors.get(0).getRotorPos();
         }
-
+        System.out.println();
         return encodedMessage;
     }
 
@@ -100,26 +106,26 @@ public class EnigmaMachine {
         motorIncrementations();
         
         char temp = pBoard.swapChar(letter);
-        System.out.println(temp);
+        System.out.print(temp);
 
         temp = selectedRotors.get(0).convertCharForward(temp);
-        System.out.println(temp);
+        // System.out.println(temp);
 
-        temp = selectedRotors.get(1).convertCharForward(temp);
-        System.out.println(temp);
+        // temp = selectedRotors.get(1).convertCharForward(temp);
+        // System.out.println(temp);
 
-        temp = selectedRotors.get(2).convertCharForward(temp);
-        System.out.println(temp);
+        // temp = selectedRotors.get(2).convertCharForward(temp);
+        // System.out.println(temp);
         
-        temp = reflector.reflect(temp);
-        System.out.println(temp);
+        // temp = reflector.reflect(temp);
+        // System.out.println(temp);
 
-        temp = selectedRotors.get(2).convertCharBackward(temp);
-        System.out.println(temp);
-        temp = selectedRotors.get(1).convertCharBackward(temp);
-        System.out.println(temp);
-        temp = selectedRotors.get(0).convertCharBackward(temp);
-        System.out.println(temp);
+        // temp = selectedRotors.get(2).convertCharBackward(temp);
+        // System.out.println(temp);
+        // temp = selectedRotors.get(1).convertCharBackward(temp);
+        // System.out.println(temp);
+        // temp = selectedRotors.get(0).convertCharBackward(temp);
+        // System.out.println(temp);
 
         temp = pBoard.swapChar(temp);
         return temp;
