@@ -195,7 +195,7 @@ public class EnigmaMachine {
         String response = sc.nextLine().toLowerCase();
         if(response.startsWith("y")) {
             for (int i = 0; i < selectedRotors.size(); i++) {
-                System.out.println("Enter the position for rotor " + selectedRotors.get(i).getRotorNum() + "(between 1 & 25) :");
+                System.out.println("Enter the position for rotor " + selectedRotors.get(i).getRotorNum() + "(between 0 & 25) :");
                 selectedRotors.get(0).setPosition(sc.nextInt() % 26);
                 sc.nextLine();
             }
